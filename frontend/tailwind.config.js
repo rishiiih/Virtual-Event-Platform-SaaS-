@@ -7,18 +7,35 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Custom color palette
+        'shadow-grey': '#1A1423',
+        'midnight-violet': '#372549',
+        'mauve-shadow': '#774C60',
+        'dusty-mauve': '#B75D69',
+        'almond-silk': '#EACDC2',
+        
+        // Semantic naming for easier use
         primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
+          DEFAULT: '#372549', // Midnight Violet
+          light: '#774C60',   // Mauve Shadow
+          dark: '#1A1423',    // Shadow Grey
         },
+        accent: {
+          DEFAULT: '#B75D69', // Dusty Mauve
+          light: '#EACDC2',   // Almond Silk
+        },
+        dark: '#1A1423',
+        light: '#EACDC2',
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+      },
+      backdropBlur: {
+        xs: '2px',
+      },
+      boxShadow: {
+        'subtle': '0 2px 8px rgba(26, 20, 35, 0.08)',
+        'subtle-lg': '0 4px 16px rgba(26, 20, 35, 0.12)',
       },
     },
   },
