@@ -1,25 +1,39 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Navbar from './components/Navbar';
+import LandingPage from './pages/LandingPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
   return (
-    <Router>
-      <div className="min-h-screen bg-gray-50">
-        {/* Navbar will be added */}
-        
-        <Routes>
-          <Route path="/" element={
-            <div className="flex items-center justify-center min-h-screen">
-              <div className="text-center">
-                <h1 className="text-4xl font-bold text-primary-600 mb-4">
-                  Virtual Event Platform
-                </h1>
-                <p className="text-gray-600">Phase 1 - Walking Skeleton</p>
+    <AuthProvider>
+      <Router>
+        <div className="min-h-screen">
+          <Navbar />
+          
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            
+            {/* Placeholder routes */}
+            <Route path="/events" element={
+              <div className="pt-24 px-4 text-center">
+                <h1 className="text-3xl font-bold text-primary-dark">Events Coming Soon</h1>
               </div>
-            </div>
-          } />
-        </Routes>
-      </div>
-    </Router>
+            } />
+            <Route path="/about" element={
+              <div className="pt-24 px-4 text-center">
+                <h1 className="text-3xl font-bold text-primary-dark">About Coming Soon</h1>
+              </div>
+            } />
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 
