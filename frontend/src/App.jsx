@@ -7,6 +7,9 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
 import SettingsPage from './pages/SettingsPage';
+import EventsPage from './pages/EventsPage';
+import EventDetailPage from './pages/EventDetailPage';
+import MyRegistrationsPage from './pages/MyRegistrationsPage';
 
 function App() {
   return (
@@ -22,13 +25,11 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/events" element={<EventsPage />} />
+            <Route path="/events/:id" element={<EventDetailPage />} />
+            <Route path="/my-registrations" element={<MyRegistrationsPage />} />
             
             {/* Placeholder routes */}
-            <Route path="/events" element={
-              <div className="pt-24 px-4 text-center">
-                <h1 className="text-3xl font-bold text-primary-dark">Events Coming Soon</h1>
-              </div>
-            } />
             <Route path="/about" element={
               <div className="pt-24 px-4 text-center">
                 <h1 className="text-3xl font-bold text-primary-dark">About Coming Soon</h1>

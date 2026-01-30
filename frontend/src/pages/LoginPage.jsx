@@ -20,12 +20,11 @@ const LoginPage = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
-    setError(''); // Clear error on input change
+    // Don't clear error on input change to keep it visible
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
 
     const result = await login(formData);
@@ -34,7 +33,9 @@ const LoginPage = () => {
       toast.success('Login successful!');
       navigate('/profile');
     } else {
-      setError(result.error);
+      const errorMessage = result.error || 'Invalid email or password';
+      setError(errorMessage);
+      toast.error(errorMessage);
     }
 
     setLoading(false);
