@@ -28,6 +28,8 @@ app.get('/health', (req, res) => {
 
 // API Routes
 import authRoutes from './routes/authRoutes.js';
+import eventRoutes from './routes/eventRoutes.js';
+import registrationRoutes from './routes/registrationRoutes.js';
 
 app.get('/api', (req, res) => {
   res.json({ message: 'Virtual Event Platform API' });
@@ -35,6 +37,8 @@ app.get('/api', (req, res) => {
 
 // Mount routes
 app.use('/api/auth', authRoutes);
+app.use('/api/events', eventRoutes);
+app.use('/api/registrations', registrationRoutes);
 
 // 404 Handler
 app.use((req, res) => {
