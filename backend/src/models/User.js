@@ -75,9 +75,16 @@ userSchema.pre('save', async function(next) {
 // Method to compare password
 userSchema.methods.comparePassword = async function(candidatePassword) {
   try {
+    if (!candidatePassword) {
+      throw new Error('Candidate password is required');
+    }
+    if (!this.password) {
+      throw new Error('User password not found');
+    }
     return await bcrypt.compare(candidatePassword, this.password);
   } catch (error) {
-    throw new Error('Password comparison failed');
+    console.error('Password comparison error:', error);
+    throw error;
   }
 };
 

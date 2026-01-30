@@ -1,16 +1,26 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import AvatarUpload from '../components/AvatarUpload';
+import EditProfile from '../components/EditProfile';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { user, loading, isAuthenticated } = useAuth();
+  const [currentAvatar, setCurrentAvatar] = useState(user?.avatar || null);
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
       navigate('/login');
     }
-  }, [loading, isAuthenticated, navigate]);
+    if (user) {
+      setCurrentAvatar(user.avatar);
+    }
+  }, [loading, isAuthenticated, navigate, user]);
+
+  const handleAvatarUpload = (newAvatarUrl) => {
+    setCurrentAvatar(newAvatarUrl);
+  };
 
   if (loading) {
     return (
@@ -20,19 +30,32 @@ const ProfilePage = () => {
     );
   }
 
-  if (!user) return null;
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-light via-white to-accent-light pt-24 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-light via-white to-accent-light pt-24 pb-12 px-4">
       <div className="max-w-4xl mx-auto">
+        {/* Avatar Upload Section */}
+        <div className="bg-white rounded-2xl shadow-subtle-lg p-8 border border-primary/10 mb-8">
+          <h2 className="text-2xl font-bold text-primary-dark mb-6 text-center">Profile Picture</h2>
+          <AvatarUpload currentAvatar={currentAvatar} onUploadSuccess={handleAvatarUpload} />
+        </div>
+
+        {/* Edit Profile Section */}
+        <div className="mb-8">
+          <EditProfile />
+        </div>
+
         {/* Profile Header */}
         <div className="bg-white rounded-2xl shadow-subtle-lg p-8 border border-primary/10 mb-8">
           <div className="flex items-center space-x-6">
             {/* Avatar */}
-            <div className="w-24 h-24 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center">
-              <span className="text-4xl font-bold text-white">
-                {user.name.charAt(0).toUpperCase()}
-              </span>
+            <div className="w-24 h-24 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center overflow-hidden">
+              {currentAvatar ? (
+                <img src={currentAvatar} alt={user.name} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-4xl font-bold text-white">
+                  {user.name.charAt(0).toUpperCase()}
+                </span>
+              )}
             </div>
 
             {/* User Info */}
@@ -75,9 +98,6 @@ const ProfilePage = () => {
 
           {/* Action Buttons */}
           <div className="mt-8 flex gap-4">
-            <button className="px-6 py-3 border-2 border-primary text-primary hover:bg-primary hover:text-white rounded-lg transition-all duration-200 font-medium">
-              Edit Profile
-            </button>
             {user.role === 'organizer' && (
               <button className="px-6 py-3 border-2 border-accent text-accent hover:bg-accent hover:text-white rounded-lg transition-all duration-200 font-medium">
                 Create Event
@@ -88,13 +108,17 @@ const ProfilePage = () => {
 
         {/* Coming Soon Section */}
         <div className="mt-8 bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl p-8 border border-primary/20">
-          <h3 className="text-xl font-bold text-primary-dark mb-2">Coming Soon</h3>
+          <h3 className="text-xl font-bold text-primary-dark mb-2">Phase 1 Completed ✓</h3>
           <ul className="space-y-2 text-primary-dark/70">
-            <li>• Avatar upload (Cloudinary integration)</li>
-            <li>• Password change</li>
-            <li>• Email notifications settings</li>
-            <li>• Two-factor authentication</li>
+            <li className="line-through opacity-50">• User authentication ✓</li>
+            <li className="line-through opacity-50">• Avatar upload with Cloudinary ✓</li>
+            <li className="line-through opacity-50">• Edit profile (name, email) ✓</li>
+            <li className="line-through opacity-50">• Password change ✓</li>
+            <li className="line-through opacity-50">• Toast notifications ✓</li>
           </ul>
+          <p className="mt-4 text-sm text-primary">
+            🚀 Ready for Phase 2: Event Management System
+          </p>
         </div>
       </div>
     </div>
