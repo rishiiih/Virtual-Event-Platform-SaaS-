@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const toast = useToast();
   
   const [formData, setFormData] = useState({
     email: '',
@@ -29,11 +31,12 @@ const LoginPage = () => {
     const result = await login(formData);
 
     if (result.success) {
+      toast.success('Login successful!');
       navigate('/profile');
     } else {
       setError(result.error);
     }
-    
+
     setLoading(false);
   };
 

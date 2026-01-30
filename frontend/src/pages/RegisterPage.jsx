@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
+import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
+import { validatePassword, validateEmail, validateName } from '../utils/validation';
 
 const RegisterPage = () => {
   const navigate = useNavigate();
   const { register } = useAuth();
+  const toast = useToast();
   
   const [formData, setFormData] = useState({
     name: '',
@@ -44,8 +48,7 @@ const RegisterPage = () => {
     const { confirmPassword, ...registerData } = formData;
     const result = await register(registerData);
 
-    if (result.success) {
-      navigate('/profile');
+    if (result.success) {      toast.success('Registration successful!');      navigate('/profile');
     } else {
       setError(result.error);
     }
@@ -206,6 +209,10 @@ const RegisterPage = () => {
                   className="w-full px-4 py-3 border-2 border-primary/20 rounded-lg focus:outline-none focus:border-primary transition-colors bg-white text-primary-dark"
                   placeholder="••••••••"
                 />
+                <PasswordStrengthMeter password={formData.password} />
+                <p className="text-xs text-primary-dark/50 mt-2">
+                  Use 8+ characters with uppercase, lowercase, numbers & symbols
+                </p>
               </div>
 
               {/* Confirm Password */}

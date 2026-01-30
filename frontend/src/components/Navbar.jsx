@@ -1,12 +1,16 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
+import Modal from './Modal';
 
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
+  const toast = useToast();
   const [scrolled, setScrolled] = useState(false);
   const [hideNavbar, setHideNavbar] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -33,7 +37,8 @@ const Navbar = () => {
   const isSplitPage = location.pathname === '/login' || location.pathname === '/register';
 
   return (
-    <nav 
+    <>
+      <nav 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         hideNavbar && isSplitPage ? '-translate-y-full' : 'translate-y-0'
       } ${
@@ -70,11 +75,27 @@ const Navbar = () => {
                     Dashboard
                   </Link>
                 )}
-                <Link to="/profile" className="text-primary-dark hover:text-primary transition-colors font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-primary after:transition-all after:duration-300">
-                  Profile
+                <Link to="/settings" className="text-primary-dark hover:text-primary transition-colors font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-primary after:transition-all after:duration-300">
+                  Settings
+                </Link>
+                <Link to="/profile" className="flex items-center gap-2 text-primary-dark hover:text-primary transition-colors font-medium">
+                  {user?.avatar ? (
+                    <img
+                      src={user.avatar}
+                      alt={user.name}
+                      className="w-8 h-8 rounded-full object-cover border-2 border-primary"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center border-2 border-primary">
+                      <span className="text-white text-sm font-bold">
+                        {user?.name?.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  )}
+                  <span>{user?.name}</span>
                 </Link>
                 <button
-                  onClick={logout}
+                  onClick={() => setShowLogoutModal(true)}
                   className="px-6 py-2.5 border-2 border-accent text-accent hover:bg-accent hover:text-white rounded-lg transition-all duration-200 font-medium"
                 >
                   Logout
@@ -109,6 +130,22 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
+
+    {/* Logout Confirmation Modal */}
+    <Modal
+      isOpen={showLogoutModal}
+      onClose={() => setShowLogoutModal(false)}
+      onConfirm={() => {
+        logout();
+        toast.info('Logged out successfully');
+      }}
+      title="Logout Confirmation"
+      message="Are you sure you want to logout?"
+      confirmText="Logout"
+      cancelText="Cancel"
+      confirmColor="red"
+    />
+  </>
   );
 };
 

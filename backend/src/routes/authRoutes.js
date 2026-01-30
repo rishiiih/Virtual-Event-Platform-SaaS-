@@ -6,7 +6,11 @@ import {
   getMe,
   updateProfile
 } from '../controllers/authController.js';
+import { uploadAvatar, deleteAvatar } from '../controllers/uploadController.js';
+import { changePassword, changePasswordValidation } from '../controllers/passwordController.js';
 import { authenticate } from '../middleware/auth.js';
+import { validate } from '../middleware/validate.js';
+import upload from '../middleware/upload.js';
 
 const router = express.Router();
 
@@ -40,11 +44,14 @@ const loginValidation = [
 ];
 
 // Public routes
-router.post('/register', registerValidation, register);
-router.post('/login', loginValidation, login);
+router.post('/register', registerValidation, validate, register);
+router.post('/login', loginValidation, validate, login);
 
 // Protected routes
 router.get('/me', authenticate, getMe);
 router.put('/profile', authenticate, updateProfile);
+router.post('/upload-avatar', authenticate, upload.single('avatar'), uploadAvatar);
+router.delete('/delete-avatar', authenticate, deleteAvatar);
+router.put('/change-password', authenticate, changePasswordValidation, validate, changePassword);
 
 export default router;
