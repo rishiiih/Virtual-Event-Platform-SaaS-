@@ -10,6 +10,9 @@ import SettingsPage from './pages/SettingsPage';
 import EventsPage from './pages/EventsPage';
 import EventDetailPage from './pages/EventDetailPage';
 import MyRegistrationsPage from './pages/MyRegistrationsPage';
+import CreateEventPage from './pages/CreateEventPage';
+import EditEventPage from './pages/EditEventPage';
+import OrganizerDashboard from './pages/OrganizerDashboard';
 
 function App() {
   return (
@@ -28,6 +31,9 @@ function App() {
             <Route path="/events" element={<EventsPage />} />
             <Route path="/events/:id" element={<EventDetailPage />} />
             <Route path="/my-registrations" element={<MyRegistrationsPage />} />
+            <Route path="/create-event" element={<CreateEventPage />} />
+            <Route path="/events/:id/edit" element={<EditEventPage />} />
+            <Route path="/my-dashboard" element={<OrganizerDashboard />} />
             
             {/* Placeholder routes */}
             <Route path="/about" element={

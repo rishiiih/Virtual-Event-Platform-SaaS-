@@ -191,3 +191,41 @@ export const updateProfile = async (req, res) => {
     });
   }
 };
+
+/**
+ * @route   PATCH /api/auth/update-role
+ * @desc    Update user role (for testing - should be admin-only in production)
+ * @access  Private
+ */
+export const updateRole = async (req, res) => {
+  try {
+    const { role } = req.body;
+
+    if (!role || !['attendee', 'organizer', 'speaker'].includes(role)) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Invalid role. Must be attendee, organizer, or speaker'
+      });
+    }
+
+    // Update user role
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { role },
+      { new: true, runValidators: true }
+    ).select('-password');
+
+    res.status(200).json({
+      status: 'success',
+      message: `Role updated to ${role} successfully`,
+      data: { user }
+    });
+  } catch (error) {
+    console.error('Update role error:', error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to update role',
+      error: error.message
+    });
+  }
+};

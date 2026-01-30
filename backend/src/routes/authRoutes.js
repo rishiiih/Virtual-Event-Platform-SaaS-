@@ -4,7 +4,8 @@ import {
   register,
   login,
   getMe,
-  updateProfile
+  updateProfile,
+  updateRole
 } from '../controllers/authController.js';
 import { uploadAvatar, deleteAvatar } from '../controllers/uploadController.js';
 import { changePassword, changePasswordValidation } from '../controllers/passwordController.js';
@@ -50,6 +51,7 @@ router.post('/login', loginValidation, validate, login);
 // Protected routes
 router.get('/me', authenticate, getMe);
 router.put('/profile', authenticate, updateProfile);
+router.patch('/update-role', authenticate, updateRole);
 router.post('/upload-avatar', authenticate, upload.single('avatar'), uploadAvatar);
 router.delete('/delete-avatar', authenticate, deleteAvatar);
 router.put('/change-password', authenticate, changePasswordValidation, validate, changePassword);

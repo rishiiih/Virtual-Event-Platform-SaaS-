@@ -1,17 +1,43 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import ChangePassword from '../components/ChangePassword';
+import api from '../utils/api';
 
 const SettingsPage = () => {
   const navigate = useNavigate();
-  const { user, loading, isAuthenticated } = useAuth();
+  const { user, loading, isAuthenticated, updateUser } = useAuth();
+  const toast = useToast();
+  const [updatingRole, setUpdatingRole] = useState(false);
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
       navigate('/login');
     }
   }, [loading, isAuthenticated, navigate]);
+
+  const handleBecomeOrganizer = async () => {
+    try {
+      setUpdatingRole(true);
+      const response = await api.patch('/auth/update-role', { role: 'organizer' });
+      
+      if (response.data.status === 'success') {
+        toast.success('You are now an organizer!');
+        // Update the user in context
+        if (updateUser) {
+          updateUser(response.data.data.user);
+        }
+        // Refresh page to update UI
+        window.location.reload();
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to update role');
+      console.error(error);
+    } finally {
+      setUpdatingRole(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -47,6 +73,33 @@ const SettingsPage = () => {
               <ChangePassword />
             </div>
           </div>
+
+          {/* Role Management */}
+          {user?.role !== 'organizer' && (
+            <div className="bg-white rounded-2xl shadow-subtle-lg border border-primary/10 overflow-hidden">
+              <div className="bg-gradient-to-r from-primary/5 to-accent/5 px-6 py-4 border-b border-primary/10">
+                <h2 className="text-xl font-bold text-primary-dark flex items-center gap-2">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  Become an Event Organizer
+                </h2>
+                <p className="text-sm text-primary-dark/60 mt-1">Create and manage your own events</p>
+              </div>
+              <div className="p-6">
+                <p className="text-primary-dark/80 mb-4">
+                  As an organizer, you'll be able to create events, manage registrations, and connect with attendees.
+                </p>
+                <button
+                  onClick={handleBecomeOrganizer}
+                  disabled={updatingRole}
+                  className="px-6 py-3 bg-accent text-white hover:bg-accent/90 rounded-xl transition-all duration-200 font-semibold shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {updatingRole ? 'Updating...' : 'Become Organizer'}
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Notifications Section (Coming Soon) */}
           <div className="bg-white rounded-2xl shadow-subtle-lg border border-primary/10 overflow-hidden">
