@@ -35,7 +35,7 @@ const LoginPage = () => {
       navigate('/profile');
     } else {
       setError(result.error);
-    }
+    }it 
 
     setLoading(false);
   };
