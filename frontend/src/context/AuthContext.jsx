@@ -67,9 +67,24 @@ export const AuthProvider = ({ children }) => {
       
       return { success: true, data: response.data };
     } catch (error) {
+      // Extract more specific error message
+      let errorMessage = 'Login failed';
+      
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.data?.errors) {
+        // Handle validation errors
+        const errors = error.response.data.errors;
+        errorMessage = errors.map(err => err.msg).join(', ');
+      } else if (error.response?.status === 401) {
+        errorMessage = 'Invalid email or password';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       return {
         success: false,
-        error: error.response?.data?.message || 'Login failed',
+        error: errorMessage,
       };
     }
   };

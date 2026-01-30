@@ -75,6 +75,9 @@ const Navbar = () => {
                     Dashboard
                   </Link>
                 )}
+                <Link to="/my-registrations" className="text-primary-dark hover:text-primary transition-colors font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-primary after:transition-all after:duration-300">
+                  My Events
+                </Link>
                 <Link to="/settings" className="text-primary-dark hover:text-primary transition-colors font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-primary after:transition-all after:duration-300">
                   Settings
                 </Link>
