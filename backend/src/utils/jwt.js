@@ -50,4 +50,4 @@ export const createTokenResponse = (user) => {
       avatar: user.avatar
     }
   };
-};
+}; 
