@@ -14,6 +14,7 @@ import MyRegistrationsPage from './pages/MyRegistrationsPage';
 import CreateEventPage from './pages/CreateEventPage';
 import EditEventPage from './pages/EditEventPage';
 import OrganizerDashboard from './pages/OrganizerDashboard';
+import EventAttendeesPage from './pages/EventAttendeesPage';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
             <Route path="/my-registrations" element={<MyRegistrationsPage />} />
             <Route path="/create-event" element={<CreateEventPage />} />
             <Route path="/events/:id/edit" element={<EditEventPage />} />
+            <Route path="/events/:id/attendees" element={<EventAttendeesPage />} />
             <Route path="/my-dashboard" element={<OrganizerDashboard />} />
             
             {/* Placeholder routes */}
