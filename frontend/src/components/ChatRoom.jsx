@@ -72,12 +72,7 @@ const ChatRoom = ({ eventId }) => {
     socket.on('user:stopped-typing', (data) => {
       setTypingUsers(prev => {
         const newSet = new Set(prev);
-        // Find and remove by userId
-        onlineUsers.forEach(u => {
-          if (u.id === data.userId) {
-            newSet.delete(u.name);
-          }
-        });
+        newSet.delete(data.name);
         return newSet;
       });
     });
@@ -118,10 +113,10 @@ const ChatRoom = ({ eventId }) => {
         clearTimeout(typingTimeoutRef.current);
       }
 
-      // Stop typing after 2 seconds of inactivity
+      // Stop typing after 1 second of inactivity
       typingTimeoutRef.current = setTimeout(() => {
         stopTyping(eventId);
-      }, 2000);
+      }, 1000);
     }
   };
 

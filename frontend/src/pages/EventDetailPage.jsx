@@ -262,7 +262,14 @@ const EventDetailPage = () => {
                 )}
               </div>
 
-              {isAuthenticated ? (
+              {event.organizer._id === user?._id ? (
+                <Link
+                  to="/my-dashboard"
+                  className="w-full px-6 py-3 bg-gradient-to-br from-primary to-mauve-shadow text-white rounded-xl font-semibold text-center block hover:opacity-90 transition-opacity shadow-md"
+                >
+                  Manage Event
+                </Link>
+              ) : isAuthenticated ? (
                 isRegistered ? (
                   <div>
                     <div className="w-full px-6 py-3 bg-green-50 border-2 border-green-500 text-green-700 rounded-xl font-semibold text-center mb-3">

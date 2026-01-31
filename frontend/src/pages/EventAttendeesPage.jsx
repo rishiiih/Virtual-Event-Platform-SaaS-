@@ -31,7 +31,7 @@ const EventAttendeesPage = () => {
       // Check if user is organizer
       if (eventResult.data.event.organizer._id !== user?._id) {
         toast.error('Only the event organizer can view attendees');
-        navigate('/organizer/dashboard');
+        navigate('/my-dashboard');
         return;
       }
 
@@ -88,7 +88,7 @@ const EventAttendeesPage = () => {
       <div className="min-h-screen bg-gradient-to-br from-light via-white to-accent-light flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-primary-dark mb-4">Event not found</h1>
-          <Link to="/organizer/dashboard" className="text-accent hover:text-accent/80 font-medium">
+          <Link to="/my-dashboard" className="text-accent hover:text-accent/80 font-medium">
             ← Back to Dashboard
           </Link>
         </div>
@@ -102,7 +102,7 @@ const EventAttendeesPage = () => {
         <div className="max-w-6xl mx-auto">
           {/* Back Button */}
           <Link 
-            to="/organizer/dashboard" 
+            to="/my-dashboard" 
             className="inline-flex items-center text-primary-dark hover:text-accent transition-colors mb-8 font-medium"
           >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
