@@ -15,6 +15,7 @@ const EventDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [registering, setRegistering] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
+  const [activeTab, setActiveTab] = useState('details'); // 'details' or 'chat'
 
   useEffect(() => {
     fetchEvent();
@@ -313,13 +314,88 @@ const EventDetailPage = () => {
           </div>
         </div>
 
-        {/* Chat Section */}
+        {/* Tabs for Details and Chat */}
         {isAuthenticated && (isRegistered || event.organizer._id === user?._id) && (
-          <div className="mt-12">
-            <h2 className="text-3xl font-bold text-primary-dark mb-6">
-              Event <span className="text-accent">Chat</span>
-            </h2>
-            <ChatRoom eventId={id} />
+          <div className="mt-8">
+            {/* Tab Navigation */}
+            <div className="bg-white rounded-t-2xl border border-primary/10 border-b-0 shadow-subtle">
+              <div className="flex">
+                <button
+                  onClick={() => setActiveTab('details')}
+                  className={`flex-1 px-6 py-4 font-semibold transition-all rounded-tl-2xl ${
+                    activeTab === 'details'
+                      ? 'bg-gradient-to-br from-primary to-mauve-shadow text-white'
+                      : 'text-primary-dark hover:bg-light'
+                  }`}
+                >
+                  📋 Event Info
+                </button>
+                <button
+                  onClick={() => setActiveTab('chat')}
+                  className={`flex-1 px-6 py-4 font-semibold transition-all rounded-tr-2xl ${
+                    activeTab === 'chat'
+                      ? 'bg-gradient-to-br from-primary to-mauve-shadow text-white'
+                      : 'text-primary-dark hover:bg-light'
+                  }`}
+                >
+                  💬 Live Chat
+                </button>
+              </div>
+            </div>
+
+            {/* Tab Content */}
+            <div className="bg-white rounded-b-2xl border border-primary/10 shadow-subtle p-6">
+              {activeTab === 'details' && (
+                <div>
+                  <h3 className="text-2xl font-bold text-primary-dark mb-4">Additional Information</h3>
+                  <div className="space-y-4 text-primary-dark/80">
+                    <div className="flex justify-between py-3 border-b border-primary/10">
+                      <span className="font-medium">Event Type:</span>
+                      <span className="capitalize">{event.eventType}</span>
+                    </div>
+                    <div className="flex justify-between py-3 border-b border-primary/10">
+                      <span className="font-medium">Category:</span>
+                      <span className="capitalize">{event.category}</span>
+                    </div>
+                    <div className="flex justify-between py-3 border-b border-primary/10">
+                      <span className="font-medium">Location Type:</span>
+                      <span className="capitalize">{event.location?.type}</span>
+                    </div>
+                    <div className="flex justify-between py-3 border-b border-primary/10">
+                      <span className="font-medium">Venue:</span>
+                      <span>{event.location?.venue || 'TBA'}</span>
+                    </div>
+                    {event.maxAttendees && (
+                      <div className="flex justify-between py-3 border-b border-primary/10">
+                        <span className="font-medium">Capacity:</span>
+                        <span>{event.currentAttendees} / {event.maxAttendees}</span>
+                      </div>
+                    )}
+                    {event.tags && event.tags.length > 0 && (
+                      <div className="py-3">
+                        <span className="font-medium block mb-2">Tags:</span>
+                        <div className="flex flex-wrap gap-2">
+                          {event.tags.map((tag, index) => (
+                            <span
+                              key={index}
+                              className="px-3 py-1 bg-accent/10 text-accent rounded-full text-sm font-medium"
+                            >
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'chat' && (
+                <div>
+                  <ChatRoom eventId={id} />
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>
