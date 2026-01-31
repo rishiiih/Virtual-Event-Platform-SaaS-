@@ -314,9 +314,11 @@ const EventDetailPage = () => {
         </div>
 
         {/* Chat Section */}
-        {isAuthenticated && isRegistered && (
+        {isAuthenticated && (isRegistered || event.organizer._id === user?._id) && (
           <div className="mt-12">
-            <h2 className="text-3xl font-bold text-primary-dark mb-6">Event Chat</h2>
+            <h2 className="text-3xl font-bold text-primary-dark mb-6">
+              Event <span className="text-accent">Chat</span>
+            </h2>
             <ChatRoom eventId={id} />
           </div>
         )}
