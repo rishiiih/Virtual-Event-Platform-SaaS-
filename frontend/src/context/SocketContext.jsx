@@ -31,8 +31,9 @@ export const SocketProvider = ({ children }) => {
       return;
     }
 
-    // Initialize socket connection
-    const newSocket = io('http://localhost:5000', {
+    // Initialize socket connection with environment-based URL
+    const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
+    const newSocket = io(SOCKET_URL, {
       auth: {
         token
       },
