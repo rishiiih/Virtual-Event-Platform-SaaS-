@@ -99,26 +99,14 @@ const ProfilePage = () => {
           {/* Action Buttons */}
           <div className="mt-8 flex gap-4">
             {user.role === 'organizer' && (
-              <button className="px-6 py-3 border-2 border-accent text-accent hover:bg-accent hover:text-white rounded-lg transition-all duration-200 font-medium">
+              <button 
+                onClick={() => navigate('/create-event')}
+                className="px-6 py-3 border-2 border-accent text-accent hover:bg-accent hover:text-white rounded-lg transition-all duration-200 font-medium"
+              >
                 Create Event
               </button>
             )}
           </div>
-        </div>
-
-        {/* Coming Soon Section */}
-        <div className="mt-8 bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl p-8 border border-primary/20">
-          <h3 className="text-xl font-bold text-primary-dark mb-2">Phase 1 Completed ✓</h3>
-          <ul className="space-y-2 text-primary-dark/70">
-            <li className="line-through opacity-50">• User authentication ✓</li>
-            <li className="line-through opacity-50">• Avatar upload with Cloudinary ✓</li>
-            <li className="line-through opacity-50">• Edit profile (name, email) ✓</li>
-            <li className="line-through opacity-50">• Password change ✓</li>
-            <li className="line-through opacity-50">• Toast notifications ✓</li>
-          </ul>
-          <p className="mt-4 text-sm text-primary">
-            🚀 Ready for Phase 2: Event Management System
-          </p>
         </div>
       </div>
     </div>
