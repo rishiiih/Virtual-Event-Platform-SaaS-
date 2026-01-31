@@ -30,10 +30,19 @@ export const createEvent = async (req, res) => {
     });
   } catch (error) {
     console.error('Create event error:', error);
+    
+    // Handle validation errors
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({
+        status: 'error',
+        message: Object.values(error.errors).map(err => err.message).join(', ')
+      });
+    }
+    
+    // Handle other errors
     res.status(500).json({
       status: 'error',
-      message: 'Failed to create event',
-      error: error.message
+      message: error.message || 'Failed to create event'
     });
   }
 };
