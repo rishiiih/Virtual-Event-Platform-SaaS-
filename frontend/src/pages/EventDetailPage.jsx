@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getEvent, registerForEvent, unregisterFromEvent, checkRegistration } from '../utils/eventApi';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
+import ChatRoom from '../components/ChatRoom';
 
 const EventDetailPage = () => {
   const { id } = useParams();
@@ -311,6 +312,14 @@ const EventDetailPage = () => {
             </div>
           </div>
         </div>
+
+        {/* Chat Section */}
+        {isAuthenticated && isRegistered && (
+          <div className="mt-12">
+            <h2 className="text-3xl font-bold text-primary-dark mb-6">Event Chat</h2>
+            <ChatRoom eventId={id} />
+          </div>
+        )}
       </div>
     </div>
   );

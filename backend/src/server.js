@@ -1,13 +1,19 @@
 import express from 'express';
+import { createServer } from 'http';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './config/database.js';
+import { initializeSocket } from './config/socket.js';
 
 // Load environment variables
 dotenv.config();
 
 // Initialize Express app
 const app = express();
+const httpServer = createServer(app);
+
+// Initialize Socket.io
+const io = initializeSocket(httpServer);
 
 // Middleware
 app.use(cors({
@@ -30,6 +36,7 @@ app.get('/health', (req, res) => {
 import authRoutes from './routes/authRoutes.js';
 import eventRoutes from './routes/eventRoutes.js';
 import registrationRoutes from './routes/registrationRoutes.js';
+import chatRoutes from './routes/chatRoutes.js';
 
 app.get('/api', (req, res) => {
   res.json({ message: 'Virtual Event Platform API' });
@@ -39,6 +46,7 @@ app.get('/api', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/registrations', registrationRoutes);
+app.use('/api/chat', chatRoutes);
 
 // 404 Handler
 app.use((req, res) => {
@@ -67,10 +75,11 @@ const startServer = async () => {
     await connectDB();
     
     // Start listening
-    app.listen(PORT, () => {
+    httpServer.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📝 Environment: ${process.env.NODE_ENV}`);
       console.log(`🔗 Health check: http://localhost:${PORT}/health`);
+      console.log(`💬 Socket.io initialized`);
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error.message);

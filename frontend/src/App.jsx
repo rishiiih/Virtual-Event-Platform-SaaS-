@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
+import { SocketProvider } from './context/SocketContext';
 import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
@@ -19,8 +20,9 @@ function App() {
     <Router>
       <ToastProvider>
         <AuthProvider>
-          <div className="min-h-screen">
-            <Navbar />
+          <SocketProvider>
+            <div className="min-h-screen">
+              <Navbar />
           
           <Routes>
             <Route path="/" element={<LandingPage />} />
@@ -43,9 +45,10 @@ function App() {
             } />
           </Routes>
         </div>
-      </AuthProvider>
-    </ToastProvider>
-    </Router>
+      </SocketProvider>
+    </AuthProvider>
+  </ToastProvider>
+  </Router>
   );
 }
 
