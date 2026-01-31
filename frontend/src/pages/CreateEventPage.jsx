@@ -41,6 +41,20 @@ const CreateEventPage = () => {
       return;
     }
 
+    // Validate dates
+    const start = new Date(formData.startDate);
+    const end = new Date(formData.endDate);
+    
+    if (end <= start) {
+      toast.error('End date must be after start date');
+      return;
+    }
+    
+    if (start < new Date()) {
+      toast.error('Start date cannot be in the past');
+      return;
+    }
+
     try {
       setLoading(true);
 
