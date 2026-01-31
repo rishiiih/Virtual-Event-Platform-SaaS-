@@ -14,10 +14,11 @@ const OrganizerDashboard = () => {
   const [filter, setFilter] = useState('all'); // all, active, cancelled, completed
 
   useEffect(() => {
-    if (isAuthenticated) {
+    // Only fetch if authenticated and not in auth loading state
+    if (isAuthenticated && !authLoading) {
       fetchMyEvents();
     }
-  }, [isAuthenticated, filter]);
+  }, [isAuthenticated, authLoading, filter]);
 
   const fetchMyEvents = async () => {
     try {
