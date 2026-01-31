@@ -55,10 +55,14 @@ const createEventValidation = [
 
 // Public routes
 router.get('/', getEvents);
+
+// Protected routes (organizers only) - MUST come before /:id route
+router.get('/my/organized', authenticate, getMyEvents);
+
+// Public route - must come after specific routes
 router.get('/:id', getEventById);
 
-// Protected routes (organizers only)
-router.get('/my/organized', authenticate, getMyEvents);
+// More protected routes
 router.post('/', authenticate, createEventValidation, validate, createEvent);
 router.put('/:id', authenticate, updateEvent);
 router.patch('/:id/status', authenticate, updateEventStatus);
