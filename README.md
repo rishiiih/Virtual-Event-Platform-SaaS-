@@ -11,8 +11,7 @@ A comprehensive full-stack web application for creating, managing, and hosting v
 
 ## 🌟 Live Demo
 
-🌐 **Live Application**: [Coming Soon - Deploying to Vercel]  
-🔧 **API Documentation**: [Coming Soon - Deploying to Render]  
+🌐 **Live Application**: https://virtual-event-platform-saa-s.vercel.app/
 📦 **GitHub Repository**: [https://github.com/rishiiih/Virtual-Event-Platform-SaaS-](https://github.com/rishiiih/Virtual-Event-Platform-SaaS-)
 
 ---
