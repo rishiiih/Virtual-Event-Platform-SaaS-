@@ -199,7 +199,7 @@ const EventsPage = () => {
                     {/* Price and Attendees */}
                     <div className="flex justify-between items-center pt-4 border-t border-[#774C60]/20">
                       <span className="text-2xl font-bold text-[#B75D69]">
-                        {event.price === 0 ? 'FREE' : `$${event.price}`}
+                        {event.price === 0 ? 'FREE' : `₹${event.price}`}
                       </span>
                       <span className="text-[#774C60] text-sm font-medium">
                         {event.currentAttendees}/{event.maxAttendees} attending

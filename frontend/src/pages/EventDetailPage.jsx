@@ -1,9 +1,21 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getEvent, registerForEvent, unregisterFromEvent, checkRegistration } from '../utils/eventApi';
+import { createOrder, verifyPayment } from '../utils/paymentApi';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import ChatRoom from '../components/ChatRoom';
+
+// Load Razorpay script
+const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
 
 const EventDetailPage = () => {
   const { id } = useParams();
@@ -58,13 +70,74 @@ const EventDetailPage = () => {
 
     try {
       setRegistering(true);
-      await registerForEvent(id);
-      toast.success('Successfully registered for event!');
-      setIsRegistered(true);
-      fetchEvent(); // Refresh to update attendee count
+      
+      // Check if event requires payment
+      if (event.price > 0) {
+        // Load Razorpay script
+        const scriptLoaded = await loadRazorpayScript();
+        
+        if (!scriptLoaded) {
+          toast.error('Failed to load payment gateway');
+          setRegistering(false);
+          return;
+        }
+
+        // Create order
+        const orderResult = await createOrder(id);
+        const { orderId, amount, currency, keyId, registration, userDetails } = orderResult.data;
+
+        // Razorpay options
+        const options = {
+          key: keyId,
+          amount: amount,
+          currency: currency,
+          name: 'VirtualEvents',
+          description: registration.eventTitle,
+          order_id: orderId,
+          prefill: {
+            name: userDetails.name,
+            email: userDetails.email
+          },
+          theme: {
+            color: '#8B5FBF'
+          },
+          handler: async function (response) {
+            try {
+              // Verify payment on backend
+              const verifyResult = await verifyPayment({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                registrationId: registration.id
+              });
+
+              toast.success('Payment successful! You are registered for the event.');
+              navigate(`/payment/success?payment_id=${response.razorpay_payment_id}&registration_id=${registration.id}`);
+            } catch (error) {
+              toast.error('Payment verification failed');
+              console.error(error);
+            }
+          },
+          modal: {
+            ondismiss: function() {
+              setRegistering(false);
+              toast.info('Payment cancelled');
+            }
+          }
+        };
+
+        const razorpay = new window.Razorpay(options);
+        razorpay.open();
+      } else {
+        // Free event - register directly
+        await registerForEvent(id);
+        toast.success('Successfully registered for event!');
+        setIsRegistered(true);
+        fetchEvent(); // Refresh to update attendee count
+        setRegistering(false);
+      }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to register');
-    } finally {
       setRegistering(false);
     }
   };
@@ -147,7 +220,7 @@ const EventDetailPage = () => {
             <span className={`px-4 py-1.5 rounded-full text-sm font-semibold ${
               event.price === 0 ? 'bg-green-500/80' : 'bg-white/20 backdrop-blur-sm'
             }`}>
-              {event.price === 0 ? 'FREE' : `$${event.price}`}
+              {event.price === 0 ? 'FREE' : `₹${event.price}`}
             </span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">{event.title}</h1>
@@ -255,7 +328,7 @@ const EventDetailPage = () => {
             <div className="bg-white rounded-2xl border border-primary/10 shadow-subtle p-6 sticky top-24">
               <div className="text-center mb-6">
                 <p className="text-4xl font-bold text-accent mb-2">
-                  {event.price === 0 ? 'FREE' : `$${event.price}`}
+                  {event.price === 0 ? 'FREE' : `₹${event.price}`}
                 </p>
                 {event.price > 0 && (
                   <p className="text-primary-dark/70 text-sm">per person</p>

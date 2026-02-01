@@ -32,6 +32,12 @@ const registrationSchema = new mongoose.Schema({
   transactionId: {
     type: String
   },
+  stripeSessionId: {
+    type: String
+  },
+  stripePaymentIntentId: {
+    type: String
+  },
   checkInTime: {
     type: Date
   },

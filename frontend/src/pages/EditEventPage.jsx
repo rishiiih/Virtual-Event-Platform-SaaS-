@@ -17,9 +17,16 @@ const EditEventPage = () => {
     eventType: 'online',
     startDate: '',
     endDate: '',
-    location: '',
-    capacity: '',
+    location: {
+      type: 'online',
+      venue: '',
+      address: '',
+      city: '',
+      country: ''
+    },
+    maxAttendees: '',
     price: 0,
+    currency: 'INR',
     tags: '',
     registrationDeadline: '',
   });
@@ -56,10 +63,17 @@ const EditEventPage = () => {
         eventType: event.eventType,
         startDate: formatDateForInput(event.startDate),
         endDate: formatDateForInput(event.endDate),
-        location: event.location,
-        capacity: event.capacity,
+        location: event.location || {
+          type: 'online',
+          venue: '',
+          address: '',
+          city: '',
+          country: ''
+        },
+        maxAttendees: event.maxAttendees,
         price: event.price,
-        tags: event.tags.join(', '),
+        currency: event.currency || 'INR',
+        tags: event.tags?.join(', ') || '',
         registrationDeadline: formatDateForInput(event.registrationDeadline),
       });
     } catch (error) {
@@ -88,7 +102,7 @@ const EditEventPage = () => {
       // Format data
       const eventData = {
         ...formData,
-        capacity: parseInt(formData.capacity),
+        maxAttendees: parseInt(formData.maxAttendees),
         price: parseFloat(formData.price),
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
       };
@@ -291,7 +305,7 @@ const EditEventPage = () => {
 
                 <div>
                   <label htmlFor="price" className="block text-sm font-semibold text-primary-dark mb-2">
-                    Price ($)
+                    Price (₹)
                   </label>
                   <input
                     type="number"

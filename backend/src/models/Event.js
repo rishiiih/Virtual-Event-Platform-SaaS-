@@ -26,7 +26,7 @@ const eventSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ['technology', 'business', 'education', 'health', 'entertainment', 'other'],
+    enum: ['technology', 'business', 'education', 'health', 'entertainment', 'sports', 'arts', 'science', 'other'],
     default: 'technology'
   },
   coverImage: {
@@ -56,7 +56,8 @@ const eventSchema = new mongoose.Schema({
   },
   currentAttendees: {
     type: Number,
-    default: 0
+    default: 0,
+    min: [0, 'Current attendees cannot be negative']
   },
   price: {
     type: Number,
@@ -64,7 +65,7 @@ const eventSchema = new mongoose.Schema({
   },
   currency: {
     type: String,
-    default: 'USD'
+    default: 'INR'
   },
   isLive: {
     type: Boolean,

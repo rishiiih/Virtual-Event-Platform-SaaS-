@@ -281,7 +281,7 @@ const CreateEventPage = () => {
 
                 <div>
                   <label htmlFor="price" className="block text-sm font-semibold text-primary-dark mb-2">
-                    Price ($)
+                    Price (₹)
                   </label>
                   <input
                     type="number"
