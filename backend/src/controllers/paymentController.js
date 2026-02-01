@@ -2,6 +2,7 @@ import Razorpay from 'razorpay';
 import crypto from 'crypto';
 import Event from '../models/Event.js';
 import Registration from '../models/Registration.js';
+import { sendRegistrationEmail, sendOrganizerNotification } from '../services/emailService.js';
 
 // Lazy initialization function
 const getRazorpayInstance = () => {
@@ -179,7 +180,7 @@ export const verifyPayment = async (req, res) => {
 
     // Find and update registration
     const registration = await Registration.findById(registrationId)
-      .populate('event', 'title startDate location imageUrl')
+      .populate('event')
       .populate('attendee', 'name email');
 
     if (!registration) {
@@ -188,6 +189,9 @@ export const verifyPayment = async (req, res) => {
         message: 'Registration not found'
       });
     }
+
+    // Get organizer details
+    const event = await Event.findById(registration.event._id).populate('organizer', 'name email');
 
     // Update registration status
     registration.paymentStatus = 'completed';
@@ -199,6 +203,29 @@ export const verifyPayment = async (req, res) => {
     await Event.findByIdAndUpdate(registration.event._id, {
       $inc: { currentAttendees: 1 }
     });
+
+    // Send confirmation email to attendee
+    try {
+      await sendRegistrationEmail(
+        registration.attendee,
+        event,
+        registration
+      );
+    } catch (emailError) {
+      console.error('Failed to send registration email:', emailError);
+      // Don't fail the payment if email fails
+    }
+
+    // Send notification to organizer
+    try {
+      await sendOrganizerNotification(
+        event.organizer,
+        event,
+        registration.attendee
+      );
+    } catch (emailError) {
+      console.error('Failed to send organizer notification:', emailError);
+    }
 
     res.status(200).json({
       success: true,

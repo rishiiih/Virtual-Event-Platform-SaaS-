@@ -1,5 +1,6 @@
 import Registration from '../models/Registration.js';
 import Event from '../models/Event.js';
+import { sendCancellationEmail } from '../services/emailService.js';
 
 /**
  * @route   POST /api/events/:id/register
@@ -110,7 +111,7 @@ export const unregisterFromEvent = async (req, res) => {
       event: eventId,
       attendee: userId,
       status: 'registered'
-    });
+    }).populate('attendee', 'name email');
 
     if (!registration) {
       return res.status(404).json({
@@ -118,6 +119,9 @@ export const unregisterFromEvent = async (req, res) => {
         message: 'Registration not found'
       });
     }
+
+    // Get event details for email
+    const event = await Event.findById(eventId);
 
     // Update registration status to cancelled
     registration.status = 'cancelled';
@@ -127,6 +131,13 @@ export const unregisterFromEvent = async (req, res) => {
     await Event.findByIdAndUpdate(eventId, {
       $inc: { currentAttendees: -1 }
     });
+
+    // Send cancellation email
+    try {
+      await sendCancellationEmail(registration.attendee, event);
+    } catch (emailError) {
+      console.error('Failed to send cancellation email:', emailError);
+    }
 
     res.status(200).json({
       status: 'success',
