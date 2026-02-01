@@ -13,21 +13,22 @@ export const useToast = () => {
 export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
 
+  const removeToast = useCallback((id) => {
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
+  }, []);
+
   const addToast = useCallback((message, type = 'info') => {
     const id = Date.now();
     setToasts((prev) => [...prev, { id, message, type }]);
 
-    // Auto remove after 5 seconds
+    // Auto remove after 7 seconds for errors, 5 seconds for others
+    const duration = type === 'error' ? 7000 : 5000;
     setTimeout(() => {
       removeToast(id);
-    }, 5000);
+    }, duration);
 
     return id;
-  }, []);
-
-  const removeToast = useCallback((id) => {
-    setToasts((prev) => prev.filter((toast) => toast.id !== id));
-  }, []);
+  }, [removeToast]);
 
   const toast = {
     success: (message) => addToast(message, 'success'),

@@ -123,7 +123,7 @@ const RegisterPage = () => {
       </div>
 
       {/* Right Side - Register Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-light via-white to-accent-light">
+      <div className="w-full lg:w-1/2 flex items-center justify-center px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-light via-white to-accent-light pt-24">
         <div className="max-w-md w-full py-12">
           {/* Card */}
           <div className="bg-white rounded-2xl shadow-subtle-lg p-8 border border-primary/10">

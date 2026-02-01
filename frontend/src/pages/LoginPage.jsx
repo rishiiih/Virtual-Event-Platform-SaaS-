@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
+
+
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -14,17 +16,26 @@ const LoginPage = () => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const submitRef = useRef(false); // ✅ Ref-based guard survives StrictMode
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-    // Don't clear error on input change to keep it visible
+    // Keep error visible - don't clear on input
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // ✅ Ref guard: if a submit is already in flight, bail out immediately.
+    // Unlike state, this check is synchronous and won't lose the race
+    // against StrictMode's second invocation.
+    if (submitRef.current) return;
+    submitRef.current = true;
+
+    setError('');
     setLoading(true);
 
     const result = await login(formData);
@@ -37,7 +48,9 @@ const LoginPage = () => {
     }
 
     setLoading(false);
+    submitRef.current = false; // ✅ Reset after the full cycle completes
   };
+
 
   return (
     <div className="min-h-screen flex">

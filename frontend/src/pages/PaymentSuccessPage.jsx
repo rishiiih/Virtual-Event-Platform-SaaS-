@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useToast } from '../context/ToastContext';
 import api from '../utils/api';
@@ -7,6 +7,7 @@ const PaymentSuccessPage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const toast = useToast();
+  const toastShown = useRef(false);
   
   const [loading, setLoading] = useState(true);
   const [paymentData, setPaymentData] = useState(null);
@@ -22,22 +23,19 @@ const PaymentSuccessPage = () => {
       return;
     }
 
-    fetchRegistrationDetails(registrationId);
-  }, [searchParams]);
-
-  const fetchRegistrationDetails = async (registrationId) => {
-    try {
-      const response = await api.get(`/registrations/${registrationId}`);
-      setPaymentData(response.data.data);
+    // Set basic payment data from URL params
+    setPaymentData({
+      _id: registrationId,
+      paymentId: paymentId
+    });
+    setLoading(false);
+    
+    // Show toast only once
+    if (!toastShown.current) {
       toast.success('Payment successful! You are registered for the event.');
-    } catch (error) {
-      console.error('Fetch registration error:', error);
-      setError(error.response?.data?.message || 'Failed to fetch payment details');
-      toast.error('Failed to fetch payment details');
-    } finally {
-      setLoading(false);
+      toastShown.current = true;
     }
-  };
+  }, [searchParams]);
 
   if (loading) {
     return (
@@ -91,51 +89,21 @@ const PaymentSuccessPage = () => {
           {/* Payment Details */}
           <div className="p-8">
             <div className="mb-6">
-              <h2 className="text-xl font-bold text-primary-dark mb-4">Event Details</h2>
-              <div className="bg-light rounded-xl p-6 space-y-3">
-                <div className="flex justify-between items-start">
-                  <span className="text-primary-dark/70">Event</span>
-                  <span className="font-semibold text-primary-dark text-right">{paymentData?.registration?.event?.title}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-primary-dark/70">Date</span>
-                  <span className="font-semibold text-primary-dark">
-                    {new Date(paymentData?.registration?.event?.startDate).toLocaleDateString('en-US', {
-                      month: 'long',
-                      day: 'numeric',
-                      year: 'numeric'
-                    })}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-primary-dark/70">Location</span>
-                  <span className="font-semibold text-primary-dark">
-                    {paymentData?.registration?.event?.location?.type === 'online' 
-                      ? 'Online Event' 
-                      : paymentData?.registration?.event?.location?.venue}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="mb-6">
               <h2 className="text-xl font-bold text-primary-dark mb-4">Payment Summary</h2>
               <div className="bg-light rounded-xl p-6 space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-primary-dark/70">Amount Paid</span>
-                  <span className="font-semibold text-primary-dark">
-                    ₹{paymentData?.registration?.paymentAmount}
-                  </span>
-                </div>
-                <div className="flex justify-between">
                   <span className="text-primary-dark/70">Payment Status</span>
-                  <span className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold capitalize">
-                    {paymentData?.registration?.paymentStatus}
+                  <span className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold">
+                    Completed
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-primary-dark/70">Payment ID</span>
-                  <span className="font-mono text-sm text-primary-dark">{searchParams.get('payment_id')?.slice(-12)}</span>
+                  <span className="font-mono text-sm text-primary-dark">{searchParams.get('payment_id')?.slice(-12) || 'N/A'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-primary-dark/70">Registration ID</span>
+                  <span className="font-mono text-sm text-primary-dark">{searchParams.get('registration_id')?.slice(-12) || 'N/A'}</span>
                 </div>
               </div>
             </div>
@@ -143,10 +111,10 @@ const PaymentSuccessPage = () => {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
-                to={`/events/${paymentData?.registration?.event?._id}`}
+                to="/events"
                 className="flex-1 px-6 py-3 bg-accent text-white hover:bg-accent/90 rounded-xl transition-all duration-200 font-semibold text-center"
               >
-                View Event Details
+                Browse Events
               </Link>
               <Link
                 to="/my-registrations"
@@ -154,19 +122,6 @@ const PaymentSuccessPage = () => {
               >
                 My Registrations
               </Link>
-            </div>
-
-            {/* Confirmation Email Notice */}
-            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-3">
-              <svg className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div>
-                <p className="text-sm font-medium text-blue-900 mb-1">Confirmation Email Sent</p>
-                <p className="text-sm text-blue-700">
-                  We've sent a confirmation email to <strong>{paymentData?.registration?.attendee?.email}</strong> with your event details and ticket.
-                </p>
-              </div>
             </div>
           </div>
         </div>

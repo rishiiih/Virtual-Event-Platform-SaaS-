@@ -67,7 +67,8 @@ const CreateEventPage = () => {
         startDate: formData.startDate,
         endDate: formData.endDate,
         maxAttendees: parseInt(formData.maxAttendees) || null,
-        price: parseFloat(formData.price),
+        price: formData.price === '' || formData.price === null ? 0 : parseFloat(formData.price) || 0,
+        currency: 'INR',
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
         location: {
           type: formData.locationType,
@@ -158,7 +159,8 @@ const CreateEventPage = () => {
                     required
                     value={formData.category}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border-2 border-primary/20 rounded-lg focus:outline-none focus:border-accent transition-colors bg-white text-primary-dark"
+                    className="w-full px-4 py-3 border-2 border-primary/20 rounded-lg focus:outline-none focus:border-accent transition-colors bg-white text-primary-dark appearance-none cursor-pointer"
+                    style={{ backgroundImage: "url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')", backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1.5em 1.5em', paddingRight: '3rem' }}
                   >
                     <option value="">Select category</option>
                     <option value="technology">Technology</option>
@@ -180,7 +182,8 @@ const CreateEventPage = () => {
                     required
                     value={formData.eventType}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border-2 border-primary/20 rounded-lg focus:outline-none focus:border-accent transition-colors bg-white text-primary-dark"
+                    className="w-full px-4 py-3 border-2 border-primary/20 rounded-lg focus:outline-none focus:border-accent transition-colors bg-white text-primary-dark appearance-none cursor-pointer"
+                    style={{ backgroundImage: "url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')", backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1.5em 1.5em', paddingRight: '3rem' }}
                   >
                     <option value="webinar">Webinar</option>
                     <option value="conference">Conference</option>
@@ -203,7 +206,8 @@ const CreateEventPage = () => {
                   required
                   value={formData.locationType}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border-2 border-primary/20 rounded-lg focus:outline-none focus:border-accent transition-colors bg-white text-primary-dark"
+                  className="w-full px-4 py-3 border-2 border-primary/20 rounded-lg focus:outline-none focus:border-accent transition-colors bg-white text-primary-dark appearance-none cursor-pointer"
+                  style={{ backgroundImage: "url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')", backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1.5em 1.5em', paddingRight: '3rem' }}
                 >
                   <option value="online">Online</option>
                   <option value="physical">Physical</option>

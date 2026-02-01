@@ -5,17 +5,17 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 
 const MyRegistrationsPage = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const toast = useToast();
   const [registrations, setRegistrations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('registered');
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && !authLoading) {
       fetchRegistrations();
     }
-  }, [isAuthenticated, filter]);
+  }, [isAuthenticated, authLoading, filter]);
 
   const fetchRegistrations = async () => {
     try {
@@ -115,7 +115,7 @@ const MyRegistrationsPage = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {registrations.map((registration) => (
+              {registrations.filter(reg => reg.event).map((registration) => (
                 <Link
                   key={registration._id}
                   to={`/events/${registration.event._id}`}

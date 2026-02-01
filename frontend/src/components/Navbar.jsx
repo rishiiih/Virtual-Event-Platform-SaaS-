@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
@@ -7,6 +7,7 @@ import Modal from './Modal';
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const toast = useToast();
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [hideNavbar, setHideNavbar] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -211,6 +212,7 @@ const Navbar = () => {
       onClose={() => setShowLogoutModal(false)}
       onConfirm={() => {
         logout();
+        navigate('/');
         toast.info('Logged out successfully');
       }}
       title="Logout Confirmation"

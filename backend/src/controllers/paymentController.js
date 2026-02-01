@@ -61,7 +61,8 @@ export const createOrder = async (req, res) => {
     const existingRegistration = await Registration.findOne({
       event: eventId,
       attendee: userId,
-      paymentStatus: 'completed'
+      paymentStatus: 'completed',
+      status: { $ne: 'cancelled' } // Exclude cancelled registrations
     });
 
     if (existingRegistration) {
@@ -71,11 +72,14 @@ export const createOrder = async (req, res) => {
       });
     }
 
-    // Delete any old pending registrations for this user and event
+    // Delete any old pending or cancelled registrations for this user and event
     await Registration.deleteMany({
       event: eventId,
       attendee: userId,
-      paymentStatus: 'pending'
+      $or: [
+        { paymentStatus: 'pending' },
+        { status: 'cancelled' }
+      ]
     });
 
     // Check if event is full
@@ -96,6 +100,13 @@ export const createOrder = async (req, res) => {
 
     // Convert price to paise (Razorpay uses smallest currency unit)
     const amount = Math.round(event.price * 100);
+
+    console.log('💰 Creating Razorpay order:', {
+      eventTitle: event.title,
+      price: event.price,
+      currency: event.currency,
+      amount: amount
+    });
 
     // Create Razorpay Order
     const order = await razorpay.orders.create({

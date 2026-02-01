@@ -111,7 +111,7 @@ const EventDetailPage = () => {
                 registrationId: registration.id
               });
 
-              toast.success('Payment successful! You are registered for the event.');
+              // Don't show toast here - PaymentSuccessPage will show it
               navigate(`/payment/success?payment_id=${response.razorpay_payment_id}&registration_id=${registration.id}`);
             } catch (error) {
               toast.error('Payment verification failed');

@@ -103,7 +103,8 @@ const EditEventPage = () => {
       const eventData = {
         ...formData,
         maxAttendees: parseInt(formData.maxAttendees),
-        price: parseFloat(formData.price),
+        price: formData.price === '' || formData.price === null ? 0 : parseFloat(formData.price) || 0,
+        currency: 'INR',
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
       };
 
@@ -200,18 +201,16 @@ const EditEventPage = () => {
                     required
                     value={formData.category}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border-2 border-primary/20 rounded-lg focus:outline-none focus:border-accent transition-colors bg-white text-primary-dark"
+                    className="w-full px-4 py-3 border-2 border-primary/20 rounded-lg focus:outline-none focus:border-accent transition-colors bg-white text-primary-dark appearance-none cursor-pointer"
+                    style={{ backgroundImage: "url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')", backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1.5em 1.5em', paddingRight: '3rem' }}
                   >
                     <option value="">Select category</option>
-                    <option value="Technology">Technology</option>
-                    <option value="Business">Business</option>
-                    <option value="Arts">Arts</option>
-                    <option value="Science">Science</option>
-                    <option value="Education">Education</option>
-                    <option value="Health">Health</option>
-                    <option value="Sports">Sports</option>
-                    <option value="Entertainment">Entertainment</option>
-                    <option value="Other">Other</option>
+                    <option value="technology">Technology</option>
+                    <option value="business">Business</option>
+                    <option value="education">Education</option>
+                    <option value="health">Health</option>
+                    <option value="entertainment">Entertainment</option>
+                    <option value="other">Other</option>
                   </select>
                 </div>
 
@@ -225,13 +224,45 @@ const EditEventPage = () => {
                     required
                     value={formData.eventType}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border-2 border-primary/20 rounded-lg focus:outline-none focus:border-accent transition-colors bg-white text-primary-dark"
+                    className="w-full px-4 py-3 border-2 border-primary/20 rounded-lg focus:outline-none focus:border-accent transition-colors bg-white text-primary-dark appearance-none cursor-pointer"
+                    style={{ backgroundImage: "url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')", backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1.5em 1.5em', paddingRight: '3rem' }}
                   >
-                    <option value="online">Online</option>
-                    <option value="in-person">In-Person</option>
-                    <option value="hybrid">Hybrid</option>
+                    <option value="webinar">Webinar</option>
+                    <option value="conference">Conference</option>
+                    <option value="workshop">Workshop</option>
+                    <option value="meetup">Meetup</option>
+                    <option value="seminar">Seminar</option>
+                    <option value="other">Other</option>
                   </select>
                 </div>
+              </div>
+
+              {/* Location Type */}
+              <div>
+                <label htmlFor="locationType" className="block text-sm font-semibold text-primary-dark mb-2">
+                  Location Type *
+                </label>
+                <select
+                  id="locationType"
+                  name="locationType"
+                  required
+                  value={formData.location?.type || 'online'}
+                  onChange={(e) => {
+                    setFormData(prev => ({
+                      ...prev,
+                      location: {
+                        ...prev.location,
+                        type: e.target.value
+                      }
+                    }));
+                  }}
+                  className="w-full px-4 py-3 border-2 border-primary/20 rounded-lg focus:outline-none focus:border-accent transition-colors bg-white text-primary-dark appearance-none cursor-pointer"
+                  style={{ backgroundImage: "url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')", backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1.5em 1.5em', paddingRight: '3rem' }}
+                >
+                  <option value="online">Online</option>
+                  <option value="physical">Physical</option>
+                  <option value="hybrid">Hybrid</option>
+                </select>
               </div>
 
               {/* Start and End Date */}
