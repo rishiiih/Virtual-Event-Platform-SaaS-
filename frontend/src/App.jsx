@@ -15,6 +15,8 @@ import CreateEventPage from './pages/CreateEventPage';
 import EditEventPage from './pages/EditEventPage';
 import OrganizerDashboard from './pages/OrganizerDashboard';
 import EventAttendeesPage from './pages/EventAttendeesPage';
+import PaymentSuccessPage from './pages/PaymentSuccessPage';
+import PaymentCancelPage from './pages/PaymentCancelPage';
 
 function App() {
   return (
@@ -38,6 +40,8 @@ function App() {
             <Route path="/events/:id/edit" element={<EditEventPage />} />
             <Route path="/events/:id/attendees" element={<EventAttendeesPage />} />
             <Route path="/my-dashboard" element={<OrganizerDashboard />} />
+            <Route path="/payment/success" element={<PaymentSuccessPage />} />
+            <Route path="/payment/cancel" element={<PaymentCancelPage />} />
             
             {/* Placeholder routes */}
             <Route path="/about" element={

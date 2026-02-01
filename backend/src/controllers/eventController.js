@@ -184,6 +184,8 @@ export const updateEvent = async (req, res) => {
     });
   } catch (error) {
     console.error('Update event error:', error);
+    console.error('Error details:', error.message);
+    console.error('Request body:', req.body);
     res.status(500).json({
       status: 'error',
       message: 'Failed to update event',
