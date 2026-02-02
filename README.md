@@ -840,8 +840,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Rishiraj Singh**
 - GitHub: [@rishiiih](https://github.com/rishiiih)
 - Email: rishirajsingh270406@gmail.com
-- LinkedIn: [Connect on LinkedIn]
-- Portfolio: [Coming Soon]
 
 ---
 
