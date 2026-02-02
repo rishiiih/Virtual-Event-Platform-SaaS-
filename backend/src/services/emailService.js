@@ -1,21 +1,10 @@
-import createTransporter from '../config/email.js';
+import { sendEmail } from '../config/email.js';
 
 /**
  * Send registration confirmation email
  */
 export const sendRegistrationEmail = async (userData, eventData, registrationData) => {
-  const transporter = createTransporter();
-  
-  if (!transporter) {
-    console.error('❌ Email transporter not available');
-    return { success: false, error: 'Email service not configured' };
-  }
-
-  const mailOptions = {
-    from: `"VirtualEvents" <${process.env.EMAIL_USER}>`,
-    to: userData.email,
-    subject: `Registration Confirmed: ${eventData.title}`,
-    html: `
+  const html = `
       <!DOCTYPE html>
       <html>
       <head>
@@ -99,13 +88,15 @@ export const sendRegistrationEmail = async (userData, eventData, registrationDat
         </div>
       </body>
       </html>
-    `
-  };
+    `;
 
   try {
-    await transporter.sendMail(mailOptions);
-    console.log(`✅ Registration email sent to ${userData.email}`);
-    return { success: true };
+    const result = await sendEmail({
+      to: userData.email,
+      subject: `Registration Confirmed: ${eventData.title}`,
+      html
+    });
+    return { success: !!result };
   } catch (error) {
     console.error('❌ Error sending registration email:', error);
     return { success: false, error: error.message };
@@ -116,18 +107,7 @@ export const sendRegistrationEmail = async (userData, eventData, registrationDat
  * Send event reminder email (1 day before)
  */
 export const sendReminderEmail = async (userData, eventData) => {
-  const transporter = createTransporter();
-  
-  if (!transporter) {
-    console.error('❌ Email transporter not available');
-    return { success: false, error: 'Email service not configured' };
-  }
-
-  const mailOptions = {
-    from: `"VirtualEvents" <${process.env.EMAIL_USER}>`,
-    to: userData.email,
-    subject: `Reminder: ${eventData.title} is Tomorrow!`,
-    html: `
+  const html = `
       <!DOCTYPE html>
       <html>
       <head>
@@ -184,13 +164,15 @@ export const sendReminderEmail = async (userData, eventData) => {
         </div>
       </body>
       </html>
-    `
-  };
+    `;
 
   try {
-    await transporter.sendMail(mailOptions);
-    console.log(`✅ Reminder email sent to ${userData.email}`);
-    return { success: true };
+    const result = await sendEmail({
+      to: userData.email,
+      subject: `Reminder: ${eventData.title} is Tomorrow!`,
+      html
+    });
+    return { success: !!result };
   } catch (error) {
     console.error('❌ Error sending reminder email:', error);
     return { success: false, error: error.message };
@@ -201,18 +183,7 @@ export const sendReminderEmail = async (userData, eventData) => {
  * Send organizer notification for new registration
  */
 export const sendOrganizerNotification = async (organizerData, eventData, attendeeData) => {
-  const transporter = createTransporter();
-  
-  if (!transporter) {
-    console.error('❌ Email transporter not available');
-    return { success: false, error: 'Email service not configured' };
-  }
-
-  const mailOptions = {
-    from: `"VirtualEvents" <${process.env.EMAIL_USER}>`,
-    to: organizerData.email,
-    subject: `New Registration: ${eventData.title}`,
-    html: `
+  const html = `
       <!DOCTYPE html>
       <html>
       <head>
@@ -253,13 +224,15 @@ export const sendOrganizerNotification = async (organizerData, eventData, attend
         </div>
       </body>
       </html>
-    `
-  };
+    `;
 
   try {
-    await transporter.sendMail(mailOptions);
-    console.log(`✅ Organizer notification sent to ${organizerData.email}`);
-    return { success: true };
+    const result = await sendEmail({
+      to: organizerData.email,
+      subject: `New Registration: ${eventData.title}`,
+      html
+    });
+    return { success: !!result };
   } catch (error) {
     console.error('❌ Error sending organizer notification:', error);
     return { success: false, error: error.message };
@@ -270,18 +243,7 @@ export const sendOrganizerNotification = async (organizerData, eventData, attend
  * Send cancellation confirmation email
  */
 export const sendCancellationEmail = async (userData, eventData) => {
-  const transporter = createTransporter();
-  
-  if (!transporter) {
-    console.error('❌ Email transporter not available');
-    return { success: false, error: 'Email service not configured' };
-  }
-
-  const mailOptions = {
-    from: `"VirtualEvents" <${process.env.EMAIL_USER}>`,
-    to: userData.email,
-    subject: `Registration Cancelled: ${eventData.title}`,
-    html: `
+  const html = `
       <!DOCTYPE html>
       <html>
       <head>
@@ -315,13 +277,15 @@ export const sendCancellationEmail = async (userData, eventData) => {
         </div>
       </body>
       </html>
-    `
-  };
+    `;
 
   try {
-    await transporter.sendMail(mailOptions);
-    console.log(`✅ Cancellation email sent to ${userData.email}`);
-    return { success: true };
+    const result = await sendEmail({
+      to: userData.email,
+      subject: `Registration Cancelled: ${eventData.title}`,
+      html
+    });
+    return { success: !!result };
   } catch (error) {
     console.error('❌ Error sending cancellation email:', error);
     return { success: false, error: error.message };

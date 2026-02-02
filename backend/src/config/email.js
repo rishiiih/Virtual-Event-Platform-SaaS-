@@ -1,36 +1,44 @@
-import nodemailer from 'nodemailer';
+import sgMail from '@sendgrid/mail';
 
-// Lazy create email transporter
-const createTransporter = () => {
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
-    console.error('❌ Email credentials not found');
-    console.log('EMAIL_USER:', process.env.EMAIL_USER ? 'Present' : 'Missing');
-    console.log('EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD ? 'Present' : 'Missing');
+// Initialize SendGrid
+const initializeSendGrid = () => {
+  if (!process.env.SENDGRID_API_KEY) {
+    console.error('❌ SendGrid API key not found');
+    return false;
+  }
+
+  try {
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    console.log('✅ SendGrid initialized');
+    return true;
+  } catch (error) {
+    console.error('❌ SendGrid initialization failed:', error.message);
+    return false;
+  }
+};
+
+// Send email using SendGrid
+export const sendEmail = async ({ to, subject, html }) => {
+  if (!initializeSendGrid()) {
+    console.error('❌ Cannot send email - SendGrid not initialized');
     return null;
   }
 
   try {
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,
-      secure: false, // true for 465, false for other ports
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD
-      },
-      tls: {
-        rejectUnauthorized: false
-      },
-      connectionTimeout: 10000, // 10 seconds
-      greetingTimeout: 10000,
-      socketTimeout: 10000
-    });
-    console.log('✅ Email transporter created');
-    return transporter;
+    const msg = {
+      to,
+      from: process.env.SENDGRID_FROM_EMAIL || 'noreply@yourdomain.com',
+      subject,
+      html,
+    };
+
+    await sgMail.send(msg);
+    console.log(`✅ Email sent to ${to}`);
+    return true;
   } catch (error) {
-    console.error('❌ Email transporter creation failed:', error.message);
+    console.error('❌ Error sending email:', error.message);
     return null;
   }
 };
 
-export default createTransporter;
+export default sendEmail;
