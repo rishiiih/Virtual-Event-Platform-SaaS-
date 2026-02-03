@@ -37,11 +37,11 @@ export const registerForEvent = async (req, res) => {
       });
     }
 
-    // Check if already registered
+    // Check if already registered (excluding cancelled registrations)
     const existingRegistration = await Registration.findOne({
       event: eventId,
       attendee: userId,
-      status: 'registered'
+      status: { $ne: 'cancelled' } // Exclude cancelled registrations
     });
 
     if (existingRegistration) {

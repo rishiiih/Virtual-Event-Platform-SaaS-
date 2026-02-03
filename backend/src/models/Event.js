@@ -75,6 +75,26 @@ const eventSchema = new mongoose.Schema({
     type: String,
     default: null
   },
+  // Agora.io streaming integration
+  stream: {
+    channelName: {
+      type: String,
+      default: null // Agora channel name
+    },
+    status: {
+      type: String,
+      enum: ['not-started', 'live', 'ended'],
+      default: 'not-started'
+    },
+    startedAt: {
+      type: Date,
+      default: null
+    },
+    endedAt: {
+      type: Date,
+      default: null
+    }
+  },
   tags: [{
     type: String,
     trim: true

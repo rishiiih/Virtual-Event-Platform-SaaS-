@@ -51,6 +51,7 @@ import authRoutes from './routes/authRoutes.js';
 import eventRoutes from './routes/eventRoutes.js';
 import registrationRoutes from './routes/registrationRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
+import streamRoutes from './routes/streamRoutes.js';
 
 app.get('/api', (req, res) => {
   res.json({ message: 'Virtual Event Platform API' });
@@ -62,6 +63,7 @@ app.use('/api/events', eventRoutes);
 app.use('/api/registrations', registrationRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/payment', paymentRoutes);
+app.use('/api/stream', streamRoutes);
 
 // 404 Handler
 app.use((req, res) => {

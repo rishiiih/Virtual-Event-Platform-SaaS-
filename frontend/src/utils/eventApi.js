@@ -73,9 +73,13 @@ export const getMyRegistrations = async (params = {}) => {
 // Check if user is registered for an event
 export const checkRegistration = async (eventId) => {
   try {
-    const response = await getMyRegistrations({ status: 'registered' });
+    const response = await getMyRegistrations();
     const registrations = response.data.registrations || [];
-    return registrations.some(reg => reg.event._id === eventId || reg.event === eventId);
+    // Check if registered and NOT cancelled
+    return registrations.some(reg => 
+      (reg.event._id === eventId || reg.event === eventId) && 
+      reg.status !== 'cancelled'
+    );
   } catch (error) {
     return false;
   }

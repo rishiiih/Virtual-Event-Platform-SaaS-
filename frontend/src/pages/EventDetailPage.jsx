@@ -336,16 +336,47 @@ const EventDetailPage = () => {
               </div>
 
               {event.organizer._id === user?._id ? (
-                <Link
-                  to="/my-dashboard"
-                  className="w-full px-6 py-3 bg-gradient-to-br from-primary to-mauve-shadow text-white rounded-xl font-semibold text-center block hover:opacity-90 transition-opacity shadow-md"
-                >
-                  Manage Event
-                </Link>
+                <div className="space-y-3">
+                  {/* Live Streaming Button for Organizer */}
+                  <Link
+                    to={`/events/${id}/stream`}
+                    className="w-full px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-xl font-semibold text-center flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg"
+                  >
+                    {event.isLive ? (
+                      <>
+                        <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                        Manage Live Stream
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" />
+                        </svg>
+                        Go Live
+                      </>
+                    )}
+                  </Link>
+                  <Link
+                    to="/my-dashboard"
+                    className="w-full px-6 py-3 bg-gradient-to-br from-primary to-mauve-shadow text-white rounded-xl font-semibold text-center block hover:opacity-90 transition-opacity shadow-md"
+                  >
+                    Manage Event
+                  </Link>
+                </div>
               ) : isAuthenticated ? (
                 isRegistered ? (
-                  <div>
-                    <div className="w-full px-6 py-3 bg-green-50 border-2 border-green-500 text-green-700 rounded-xl font-semibold text-center mb-3">
+                  <div className="space-y-3">
+                    {/* Live Stream Button - Show if event is live */}
+                    {event.isLive && (
+                      <Link
+                        to={`/events/${id}/stream`}
+                        className="w-full px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-semibold text-center flex items-center justify-center gap-2 hover:from-red-600 hover:to-red-700 transition-all shadow-md hover:shadow-lg animate-pulse"
+                      >
+                        <span className="w-2 h-2 bg-white rounded-full"></span>
+                        Join Live Stream
+                      </Link>
+                    )}
+                    <div className="w-full px-6 py-3 bg-green-50 border-2 border-green-500 text-green-700 rounded-xl font-semibold text-center">
                       ✓ Registered
                     </div>
                     <button

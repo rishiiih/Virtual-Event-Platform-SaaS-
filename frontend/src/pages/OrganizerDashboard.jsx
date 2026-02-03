@@ -256,8 +256,23 @@ const OrganizerDashboard = () => {
                       </div>
 
                       {/* Action Buttons */}
-                      <div className="flex lg:flex-col gap-2 lg:min-w-[140px]">
-                        <Link
+                      <div className="flex lg:flex-col gap-2 lg:min-w-[140px]">                        {/* Go Live Button - Show for upcoming/ongoing events */}
+                        {(event.status === 'active' || event.status === 'ongoing') && (
+                          <Link
+                            to={`/events/${event._id}/stream`}
+                            className={`flex-1 lg:flex-none px-4 py-2 ${
+                              event.isLive
+                                ? 'bg-red-500 hover:bg-red-600 animate-pulse'
+                                : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
+                            } text-white rounded-lg transition-all duration-200 font-semibold text-center flex items-center justify-center gap-2`}
+                          >
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" />
+                            </svg>
+                            {event.isLive ? 'Manage Stream' : 'Go Live'}
+                          </Link>
+                        )}
+                                                <Link
                           to={`/events/${event._id}/attendees`}
                           className="flex-1 lg:flex-none px-4 py-2 bg-gradient-to-br from-primary to-accent text-white hover:shadow-lg rounded-lg transition-all duration-200 font-semibold text-center flex items-center justify-center gap-2"
                         >

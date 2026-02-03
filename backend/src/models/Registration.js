@@ -49,8 +49,17 @@ const registrationSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Compound index to prevent duplicate registrations
-registrationSchema.index({ event: 1, attendee: 1 }, { unique: true });
+// Compound index to prevent duplicate active registrations
+// Partial index only applies to non-cancelled registrations, allowing re-registration
+registrationSchema.index(
+  { event: 1, attendee: 1 }, 
+  { 
+    unique: true,
+    partialFilterExpression: { 
+      status: { $in: ['registered', 'attended', 'no-show'] }
+    }
+  }
+);
 
 // Index for queries
 registrationSchema.index({ attendee: 1, status: 1 });
