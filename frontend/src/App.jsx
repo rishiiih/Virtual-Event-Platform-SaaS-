@@ -18,6 +18,7 @@ import ProfilePage from './pages/ProfilePage';
 import SettingsPage from './pages/SettingsPage';
 import EventsPage from './pages/EventsPage';
 import EventDetailPage from './pages/EventDetailPage';
+import EventStreamPage from './pages/EventStreamPage';
 import MyRegistrationsPage from './pages/MyRegistrationsPage';
 import CreateEventPage from './pages/CreateEventPage';
 import EditEventPage from './pages/EditEventPage';
@@ -49,6 +50,7 @@ const Layout = () => {
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/events" element={<EventsPage />} />
         <Route path="/events/:id" element={<EventDetailPage />} />
+        <Route path="/events/:id/stream" element={<EventStreamPage />} />
         <Route path="/my-registrations" element={<MyRegistrationsPage />} />
         <Route path="/create-event" element={<CreateEventPage />} />
         <Route path="/events/:id/edit" element={<EditEventPage />} />

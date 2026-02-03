@@ -10,6 +10,7 @@ A feature-rich, production-ready SaaS platform for creating, managing, and hosti
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![Razorpay](https://img.shields.io/badge/Razorpay-02042B?style=for-the-badge&logo=razorpay&logoColor=white)
 ![SendGrid](https://img.shields.io/badge/SendGrid-3368FF?style=for-the-badge&logo=sendgrid&logoColor=white)
+![Agora](https://img.shields.io/badge/Agora-099DFD?style=for-the-badge&logo=agora&logoColor=white)
 
 ## 🌟 Live Demo
 
@@ -150,6 +151,33 @@ A feature-rich, production-ready SaaS platform for creating, managing, and hosti
 - ✅ **Character Limit**: 1000 character validation for messages
 - ✅ **Connection Management**: Automatic reconnection on disconnect
 
+### 🎥 Live Streaming & Broadcasting (Agora.io)
+- ✅ **YouTube-Style Broadcasting**: One-to-many live streaming with unlimited viewers
+- ✅ **Host Broadcasting**: Event organizers stream video/audio to all attendees
+- ✅ **Watch-Only Mode**: Attendees view streams without broadcasting (audience mode)
+- ✅ **Real-time Video Streaming**: Low latency (~2-3 seconds) professional quality streaming
+- ✅ **Broadcasting Controls**:
+  - Start/stop stream from organizer dashboard
+  - Toggle camera and microphone
+  - Live viewer count for organizers
+  - End stream for everyone
+- ✅ **Agora.io Integration**: 
+  - Secure token generation per session
+  - Role-based access (Host vs Audience)
+  - Channel-based isolation per event
+  - Auto-expiring tokens (24-hour validity)
+- ✅ **Scalability**: Supports 100+ concurrent viewers per stream
+- ✅ **Stream Management**:
+  - Dedicated broadcast room UI
+  - Stream status tracking (not-started/live/ended)
+  - Automatic cleanup after stream ends
+  - Pre-stream and post-stream states
+- ✅ **User Experience**:
+  - "Go Live" button for organizers
+  - "Watch Stream" for registered attendees
+  - Seamless integration with event chat
+  - Professional broadcast interface
+
 ### 🎨 UI/UX Design & Enhancements
 - ✅ **Custom Color Palette**: Dark-themed with purple-pink gradient accents
   - Primary Dark: `#1A1423`
@@ -197,6 +225,8 @@ A feature-rich, production-ready SaaS platform for creating, managing, and hosti
 | **Axios** | 1.6.5 | HTTP client for API requests with interceptors |
 | **Tailwind CSS** | 3.4.1 | Utility-first CSS framework for rapid UI development |
 | **React Icons** | 5.0.1 | Icon library with multiple icon packs |
+| **Agora RTC React** | Latest | React SDK for live video broadcasting |
+| **Agora RTC SDK** | Latest | Core Agora RTC engine for WebRTC streaming |
 | **React Toastify** | - | Toast notifications for user feedback |
 
 ### Backend
@@ -213,6 +243,7 @@ A feature-rich, production-ready SaaS platform for creating, managing, and hosti
 | **Cloudinary** | 2.0.1 | Cloud image storage, optimization, and CDN |
 | **Razorpay** | 2.9.2 | Payment gateway SDK for Indian payments |
 | **SendGrid** | 7.7.0 | Transactional email service |
+| **Agora Token** | Latest | Server-side token generation for secure streaming |
 | **CORS** | 2.8.5 | Cross-Origin Resource Sharing middleware |
 | **Dotenv** | 16.3.1 | Environment variable management |
 
@@ -230,6 +261,7 @@ A feature-rich, production-ready SaaS platform for creating, managing, and hosti
   - Pricing information
   - Organizer reference
   - Status (upcoming, ongoing, completed, cancelled)
+  - **Live streaming integration** (channelName, stream status, timestamps)
 - **Registration Model**: 
   - User-event relationship
   - Status tracking (pending, confirmed, cancelled, attended)
@@ -249,6 +281,7 @@ A feature-rich, production-ready SaaS platform for creating, managing, and hosti
 | **Cloudinary** | Image storage and CDN | Free (25 credits/month) |
 | **Razorpay** | Payment processing | Test mode (free) |
 | **SendGrid** | Email delivery | Free (100 emails/day) |
+| **Agora.io** | Live video broadcasting | Free (10,000 minutes/month) |
 | **Vercel** | Frontend hosting | Free (hobby plan) |
 | **Render** | Backend hosting | Free (750 hrs/month) |
 
@@ -269,6 +302,7 @@ A feature-rich, production-ready SaaS platform for creating, managing, and hosti
 - **Cloudinary** account ([Sign up](https://cloudinary.com/users/register/free))
 - **Razorpay** account for payments ([Sign up](https://razorpay.com/))
 - **SendGrid** account for emails ([Sign up](https://sendgrid.com/free/))
+- **Agora.io** account for live streaming ([Sign up](https://console.agora.io/))
 - **Git** for version control
 
 ### Installation Steps
@@ -311,6 +345,10 @@ RAZORPAY_KEY_SECRET=your_razorpay_key_secret
 # SendGrid Email Service
 SENDGRID_API_KEY=your_sendgrid_api_key
 SENDGRID_FROM_EMAIL=noreply@yourdomain.com
+
+# Agora.io Live Broadcasting
+AGORA_APP_ID=your_agora_app_id
+AGORA_APP_CERTIFICATE=your_agora_app_certificate
 
 # Frontend URL for CORS
 FRONTEND_URL=http://localhost:5173
